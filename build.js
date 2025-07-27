@@ -37,7 +37,7 @@ try {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: #4285f4;
             color: white;
             border: none;
             cursor: pointer;
@@ -59,75 +59,100 @@ try {
             height: 500px;
             background: white;
             border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
         .chat-header {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: #4285f4;
             color: white;
-            padding: 16px;
-            font-weight: 600;
+            padding: 16px 20px;
+            font-weight: 500;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .chat-messages {
             flex: 1;
             padding: 16px;
             overflow-y: auto;
-            background: #f9fafb;
+            background: #f5f5f5;
         }
         .message {
             margin-bottom: 12px;
             padding: 10px 14px;
-            border-radius: 12px;
+            border-radius: 18px;
             max-width: 85%;
             word-wrap: break-word;
         }
         .message.user {
-            background: #4f46e5;
+            background: #4285f4;
             color: white;
             margin-left: auto;
+            border-radius: 18px 18px 4px 18px;
         }
         .message.assistant {
             background: white;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #e0e0e0;
+            color: #333;
+            border-radius: 18px 18px 18px 4px;
         }
         .chat-input {
-            border-top: 1px solid #e5e7eb;
-            padding: 16px;
+            border-top: 1px solid #e0e0e0;
+            padding: 12px 16px;
             background: white;
             display: flex;
             gap: 8px;
+            align-items: center;
         }
         .chat-input input {
             flex: 1;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            padding: 10px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 10px 16px;
             outline: none;
             font-size: 14px;
+            background: white;
         }
         .chat-input input:focus {
-            border-color: #4f46e5;
+            border-color: #4285f4;
         }
         .send-button {
-            background: #4f46e5;
+            background: #4285f4;
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 10px 16px;
+            width: 36px;
+            height: 36px;
             cursor: pointer;
-            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
         }
         .send-button:disabled {
             opacity: 0.5;
+            cursor: not-allowed;
         }
         .welcome-message {
-            text-align: center;
-            color: #6b7280;
-            margin: 20px 0;
-            font-size: 14px;
+            padding: 10px 14px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 18px 18px 18px 4px;
+            color: #333;
+            margin-bottom: 12px;
+            max-width: 85%;
+        }
+        .typing-indicator {
+            background: white;
+            border: 1px solid #e0e0e0;
+            color: #666;
+            padding: 10px 14px;
+            border-radius: 18px 18px 18px 4px;
+            max-width: 85%;
         }
     </style>
 </head>
@@ -213,13 +238,14 @@ try {
                 
                 isOpen && React.createElement('div', { className: 'chat-panel' },
                     React.createElement('div', { className: 'chat-header' }, 
-                        'Shop Twist & Thread Assistant'
+                        React.createElement('span', { style: { marginRight: '8px' } }, '🤖'),
+                        'AI Assistant'
                     ),
                     
                     React.createElement('div', { className: 'chat-messages' },
                         messages.length === 0 ? 
                             React.createElement('div', { className: 'welcome-message' },
-                                'Hi! I\\'m here to help with questions about our custom sewing services, Class of 2026 collection, and order information.'
+                                'Hi! I\\'m your AI assistant. How can I help you today?'
                             ) : 
                             messages.map((msg, idx) => 
                                 React.createElement('div', {
@@ -229,14 +255,14 @@ try {
                             ),
                         
                         isLoading && React.createElement('div', {
-                            className: 'message assistant'
+                            className: 'typing-indicator'
                         }, 'Typing...')
                     ),
                     
                     React.createElement('div', { className: 'chat-input' },
                         React.createElement('input', {
                             type: 'text',
-                            placeholder: 'Ask me anything...',
+                            placeholder: 'Type your message...',
                             value: inputValue,
                             onChange: (e) => setInputValue(e.target.value),
                             onKeyPress: handleKeyPress,
@@ -245,8 +271,9 @@ try {
                         React.createElement('button', {
                             className: 'send-button',
                             onClick: sendMessage,
-                            disabled: isLoading || !inputValue.trim()
-                        }, 'Send')
+                            disabled: isLoading || !inputValue.trim(),
+                            title: 'Send message'
+                        }, '✈️')
                     )
                 )
             );
